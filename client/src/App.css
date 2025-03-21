@@ -13,3 +13,48 @@ form div input:focus ~ div i {
   height: 34px;
   opacity: 1;
 }
+
+x-word {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease-in-out;
+
+  &.marked {
+    border-color: red;
+  }
+}
+
+x-letter {
+  color: #999;
+  position: relative;
+
+  &.active::before {
+    content: '|';
+    color: lightblue;
+    font-size: 1em;
+    position: absolute;
+    top: -8%;
+    left: -70%;
+    animation: 1s blink infinite ease-in-out;
+  }
+
+  &.correct {
+    color: white;
+  }
+
+  &.incorrect {
+    color: red;
+  }
+  &.active.is-last::before {
+    left: 60%;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0;
+  }
+}
