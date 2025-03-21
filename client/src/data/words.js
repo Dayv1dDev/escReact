@@ -6,7 +6,7 @@ export const words = [
     "cual",
     "hola",
     "mundo",
-    "adios",
+    "adiós",
     "hasta",
     "luego",
     "amigo",
