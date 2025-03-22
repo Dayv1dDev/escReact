@@ -33,7 +33,7 @@ x-letter {
     font-size: 1em;
     position: absolute;
     top: -8%;
-    left: -70%;
+    left: -58%;
     animation: 1s blink infinite ease-in-out;
   }
 
@@ -44,8 +44,9 @@ x-letter {
   &.incorrect {
     color: red;
   }
+
   &.active.is-last::before {
-    left: 60%;
+    left: 58%;
   }
 }
 
