@@ -62,5 +62,8 @@ export const words = [
     "patata",
     "piruleta",
     "pomelo",
-    "magnetismo"
+    "magnetismo",
+    "aceituna",
+    "vaso",
+    "cohetes"
 ];
