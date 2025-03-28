@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import "../App.css"
 import MainBackground from "../components/MainBackground"
 
@@ -30,7 +31,7 @@ export default function Login() {
                     <aside className="flex flex-col items-center justify-center gap-3 p-10 w-full rounded-r-sm bg-gradient-to-br from-emerald-600 to-blue-600">
                         <h1 className="text-3xl font-bold text-center">¿Eres nuevo/a?</h1>
                         <p className="flex text-pretty text-center">Puedes registrarte justo aquí para empezar a mejorar tu mecanografía y tiempo de reacción</p>
-                        <a href="/register.html" className="w-fit py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-150">Regístrate</a>
+                        <Link to="/register" className="w-fit py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-150">Regístrate</Link>
                     </aside>
                 </section>
             </main>
