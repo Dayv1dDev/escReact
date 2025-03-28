@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { words } from "../data/words";
 import MainBackground from "../components/MainBackground";
+import ResultsParagraph from "../components/ResultsParagraph";
 
 export default function Esc() {
     const gameRef = useRef(null);
     const statsRef = useRef(null);
     const wordsRef = useRef(null);
+    const startRef = useRef(null);
     const inputRef = useRef(null);
 
     const INITIAL_TIME = 30;
@@ -20,17 +22,15 @@ export default function Esc() {
     const [accuracy, setAccuracy] = useState(0);
 
     useEffect(() => {
-        startGame();
+        setCurrentWords(sortedWords);
         startEvents();
     }, []);
 
     function startGame() {
-        setCurrentWords(sortedWords);
+        startRef.current.classList.add("hidden");
+        inputRef.current.disabled = false;
+        startRef.current.disabled = true;
         let currentTime = INITIAL_TIME;
-
-        const firstWordEl = document.querySelector("x-word");
-        firstWordEl.classList.add("active");
-        firstWordEl.firstElementChild.classList.add("active");
 
         const interval = setInterval(() => {
             currentTime--;
@@ -53,6 +53,8 @@ export default function Esc() {
         statsRef.current.classList.remove("hidden");
         statsRef.current.classList.add("flex", "flex-col");
 
+        inputRef.current.disabled = true;
+
         const incorrectWords = document.querySelectorAll("x-word.marked").length;
         const correctWords = document.querySelectorAll("x-word.correct").length;
         const incorrectLetters = document.querySelectorAll("x-letter.incorrect").length;
@@ -61,18 +63,24 @@ export default function Esc() {
         const totalLetters = correctLetters + incorrectLetters;
         
         const speed = correctWords / INITIAL_TIME * 60;
-        const accuracy = (totalLetters > 0 ? (correctLetters / totalLetters) * 100 : 0).toFixed(2);
+        let accuracy = totalLetters > 0 && correctLetters > 0 ? ((correctLetters / totalLetters) * 100).toFixed(2) : 0;
+        if (!incorrectLetters && totalLetters > 0) accuracy = 100;
 
         return { correctWords, incorrectWords, speed, accuracy };
     }
 
     function resetGame() {
         setTime(INITIAL_TIME);
+        startRef.current.disabled = false;
+        inputRef.current.disabled = true;
+        inputRef.current.value = "";
 
         gameRef.current.classList.remove("hidden");
         gameRef.current.classList.add("flex", "flex-col");
         statsRef.current.classList.remove("flex", "flex-col");
         statsRef.current.classList.add("hidden");
+
+        startRef.current.classList.remove("hidden");
 
         wordsRef.current.querySelectorAll("x-word").forEach(wordEl => {
             wordEl.classList.remove("active", "marked", "correct");
@@ -81,17 +89,20 @@ export default function Esc() {
             });
         });
 
-        inputRef.current.value = "";
-
         setCorrectWords(0);
         setIncorrectWords(0);
         setSpeed(0);
         setAccuracy(0);
+        window.location.reload();
 
-        startGame();
+        startEvents();
     }
     
     function startEvents() {
+        const firstWordEl = document.querySelector("x-word");
+        firstWordEl.classList.add("active");
+        firstWordEl.firstElementChild.classList.add("active");
+
         document.addEventListener("keydown", () => {
             inputRef.current.focus();
         });
@@ -112,7 +123,7 @@ export default function Esc() {
             const nextLetterEl = nextWordEl.querySelector("x-letter");
 
             activeWordEl.classList.remove("active", "marked");
-            activeLetterEl.classList.remove("active");
+            activeLetterEl.classList.remove("active", "is-last");
 
             nextWordEl.classList.add("active");
             nextLetterEl.classList.add("active");
@@ -163,7 +174,6 @@ export default function Esc() {
         const currentWord = activeWordEl.textContent.trim();
         inputRef.current.maxLength = currentWord.length;
 
-
         lettersEl.forEach(letterEl => {
             letterEl.classList.remove("correct", "incorrect");
         });
@@ -188,7 +198,7 @@ export default function Esc() {
     }
 
     return (
-        <main className="h-screen flex justify-center items-center">
+        <main className="relative h-screen flex justify-center items-center">
             <MainBackground />
             <section ref={gameRef} className="font-mono md:w-3xl sm:w-xl w-lg flex flex-col justify-center">
                 <time className="mb-1.5 md:text-3xl text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">{time}</time>
@@ -200,22 +210,25 @@ export default function Esc() {
                             <x-word key={index}>
                                 {letters.map((letter, index) => {
                                     return (
-                                        <x-letter key={index}>{letter}</x-letter>
+                                        <x-letter key={`${index}`} id={`${index}`}>{letter}</x-letter>
                                     )
                                 })}
                             </x-word>
                         )
                     })}
                 </p>
-                <input ref={inputRef} autoFocus className="absolute top-0 left-0 opacity-0 pointer-events-none" />
+                <button disabled={false} ref={startRef} onClick={startGame} className="absolute left-0 top-0 h-screen w-full bg-black/70">
+                    <span>Pulsa clic para comenzar el test</span>
+                </button>
+                <input ref={inputRef} disabled autoFocus className="absolute top-0 left-0 opacity-0 pointer-events-none" />
             </section>
             <section ref={statsRef} id="stats" className="hidden">
                 <h2 className="mb-2 text-4xl font-bold">Resultados</h2>
                 <div className="grid grid-cols-2 gap-6">
-                    <p className="flex flex-col font-bold text-white/5 bg-clip-text bg-gradient-to-br from-emerald-400 to-blue-400">Palabras correctas: <span className="text-white font-medium">{correctWords}</span></p>
-                    <p className="flex flex-col font-bold text-white/5 bg-clip-text bg-gradient-to-br from-emerald-400 to-blue-400">Palabras incorrectas: <span className="text-white font-medium">{incorrectWords}</span></p>
-                    <p className="flex flex-col font-bold text-white/5 bg-clip-text bg-gradient-to-br from-emerald-400 to-blue-400">Velocidad: <span className="text-white font-medium">{speed} ppm</span></p>
-                    <p className="flex flex-col font-bold text-white/5 bg-clip-text bg-gradient-to-br from-emerald-400 to-blue-400">Precisión: <span className="text-white font-medium">{accuracy}%</span></p>
+                    <ResultsParagraph stat={"Palabras correctas: "} statConst={correctWords} />
+                    <ResultsParagraph stat={"Palabras incorrectas: "} statConst={incorrectWords} />
+                    <ResultsParagraph stat={"Velocidad: "} statConst={`${speed} ppm`} />
+                    <ResultsParagraph stat={"Precisión: "} statConst={`${accuracy}%`} />
                 </div>
                 <div className="mt-6 flex gap-4">
                     <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={resetGame}>Reset</button>
