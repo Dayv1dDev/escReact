@@ -232,7 +232,7 @@ export default function Esc() {
                 </div>
                 <div className="mt-6 flex gap-4">
                     <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={resetGame}>Reset</button>
-                    <Link href="/leaderboard" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
+                    <Link to="/leaderboards" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
                 </div>
             </section>
         </main>
