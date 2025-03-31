@@ -26,7 +26,7 @@ export default function Login() {
                                 <i className="absolute left-0.5 bottom-0.5 w-[calc(100%-4px)] h-0 z-10 opacity-0 bg-black/40 overflow-hidden transition-all duration-300"></i>
                             </div>
                         </div>
-                        <button type='submit' className="w-fit self-center py-2 px-8 mt-4 font-semibold rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 hover:scale-110 transition-all duration-150">Iniciar sesión</button>
+                        <button type="submit" className="w-fit self-center py-2 px-8 mt-4 font-semibold rounded-full bg-gradient-to-br from-emerald-600 to-blue-600 hover:scale-110 transition-all duration-150">Iniciar sesión</button>
                     </form>
                     <aside className="flex flex-col items-center justify-center gap-3 p-10 w-full rounded-r-sm bg-gradient-to-br from-emerald-600 to-blue-600">
                         <h1 className="text-3xl font-bold text-center">¿Eres nuevo/a?</h1>
