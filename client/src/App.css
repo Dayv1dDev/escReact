@@ -3,6 +3,10 @@ form div input:focus ~ label {
   transform: translateY(-1.75rem);
 }
 
+.translate-e-label {
+  transform: translateY(-1.75rem);
+}
+
 form div input:valid ~ i,
 form div input:focus ~ i {
   height: 38px;
