@@ -11,7 +11,9 @@ export default function Register() {
     const [regEmail, setRegEmail] = useState("");
     const [regPassword, setRegPassword] = useState("");
 
-    function registerUser() {
+    function registerUser(e) {
+        e.preventDefault();
+
         Axios.post("http://localhost:5713/register", {
             username: regUsername,
             email: regEmail,
