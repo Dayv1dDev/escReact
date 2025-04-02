@@ -1,6 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
 
 const app = express();
 
@@ -17,28 +20,30 @@ const db = mysql.createConnection({
 app.post("/register", (req, res) => {
     const { username, email, password } = req.body;
 
-    db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, password], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send("Error al registrar el usuario");
-        }
-        res.status(201).send("Usuario registrado con éxito");
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) console.log(err);
+        db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hash], (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send("Error al registrar el usuario");
+            }
+            res.status(201).send("Usuario registrado con éxito");
+        });
     });
 });
 
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
-    db.query("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, result) => {
-        if (err) {
-            res.send({ err: err });
-        }
-
+    db.query("SELECT * FROM users WHERE username = ?", username, (err, result) => {
+        if (err) res.send({ err: err });
         if (result.length > 0) {
-            res.send(result);
-        } else {
-            res.send({message: "Nombre de usuario o contraseña incorrectos"});
-        }
+            bcrypt.compare(password, result[0].password, (err, response) => {
+                if (response) res.send(result);
+                else res.send({message: "Nombre de usuario o contraseña incorrectos"});
+            });
+        } 
+        else res.send({message: "Usuario inexistente en la base de datos"});
     });
 })
 
