@@ -31,14 +31,13 @@ app.post("/login", (req, res) => {
 
     db.query("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, result) => {
         if (err) {
-            console.error(err);
-            return res.status(500).send("Error al iniciar sesión");
+            res.send({ err: err });
         }
 
         if (result.length > 0) {
-            res.status(200).send("Inicio de sesión exitoso");
+            res.send(result);
         } else {
-            res.status(401).send("Nombre de usuario o contraseña incorrectos");
+            res.send({message: "Nombre de usuario o contraseña incorrectos"});
         }
     });
 })
