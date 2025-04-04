@@ -1,20 +1,49 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
 
+const dotenv = require('dotenv');
+dotenv.config({ path: "./.env" });
+
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true
+}));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(session({
+    key: "userId",
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        maxAge: parseInt(process.env.SESSION_MAX_AGE)
+    }
+}))
 
 const db = mysql.createConnection({
-    user: "root",
-    host: "localhost",
-    password: "DMCFutbol10@",
-    database: "escreact"
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB
+});
+
+db.connect((err) => {
+    if (err) console.log(err);
+    else console.log("MySQL conectado con éxito...");
 });
 
 app.post("/register", (req, res) => {
@@ -32,6 +61,11 @@ app.post("/register", (req, res) => {
     });
 });
 
+app.get("/login", (req, res) => {
+    if (req.session.user) res.send({ isLoggedIn: true, user: req.session.user });
+    else res.send({ isLoggedIn: false });
+});
+
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
@@ -39,14 +73,17 @@ app.post("/login", (req, res) => {
         if (err) res.send({ err: err });
         if (result.length > 0) {
             bcrypt.compare(password, result[0].password, (err, response) => {
-                if (response) res.send(result);
+                if (response) {
+                    req.session.user = result;
+                    res.send(result);
+                }
                 else res.send({message: "Nombre de usuario o contraseña incorrectos"});
             });
         } 
         else res.send({message: "Usuario inexistente en la base de datos"});
     });
-})
+});
 
-app.listen(5713, () => {
-    console.log("Servidor conectado en el puerto 5713");
-})
+app.listen(5174, () => {
+    console.log("Servidor conectado en el puerto 5174");
+});
