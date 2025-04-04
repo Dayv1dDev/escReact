@@ -11,10 +11,12 @@ export default function Register() {
     const [regEmail, setRegEmail] = useState("");
     const [regPassword, setRegPassword] = useState("");
 
+    Axios.defaults.withCredentials = true;
+
     function registerUser(e) {
         e.preventDefault();
 
-        Axios.post("http://localhost:5713/register", {
+        Axios.post("http://localhost:5174/register", {
             username: regUsername,
             email: regEmail,
             password: regPassword
@@ -60,7 +62,7 @@ export default function Register() {
                         <article className="flex flex-col gap-9 mb-4">
                             <div className="relative">
                                 <input onChange={(e) => {setRegUsername(e.target.value)}} className="relative w-full py-2 pr-2 pl-2 bg-transparent text-base font-medium border-none outline-0 z-20 transition-all duration-300" type='text' id='username' name='username' maxLength={55} required />
-                                <label className="font-semibold absolute left-0 pointer-events-none py-2 pr-1 pl-1 text-base transition-all duration-300" htmlFor="username">Nombre de usuario</label>
+                                <label className="font-semibold absolute left-0 pointer-events-none py-2 pr-1 pl-1 text-base transition-all duration-300" htmlFor="username">Usuario</label>
                                 <i className="absolute left-0 bottom-0 w-full h-0.5 bg-gradient-to-br from-emerald-600 to-blue-600 overflow-hidden rounded-xs transition-all duration-300"></i>
                                 <div>
                                     <i className="absolute left-0.5 bottom-0.5 w-[calc(100%-4px)] h-0 z-10 opacity-0 bg-black/80 overflow-hidden transition-all duration-300"></i>
