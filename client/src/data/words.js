@@ -16,7 +16,7 @@ export const words = [
     "express",
     "coche",
     "jugar",
-    "futbol",
+    "fútbol",
     "videojuegos",
     "ordenador",
     "programar",
