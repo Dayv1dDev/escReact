@@ -57,7 +57,7 @@ export default function Register() {
                         <p className="flex text-pretty text-center"></p>
                         <Link to="/login" className="w-fit py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-150">Iniciar sesión</Link>
                     </aside>
-                    <form method="POST" action="/register" className="flex flex-col justify-center w-full rounded-r-sm bg-black/50 p-10">
+                    <form method="POST" className="flex flex-col justify-center w-full rounded-r-sm bg-black/50 p-10">
                         <h1 className="text-3xl self-center font-bold mb-9">Crea tu cuenta de escReact</h1>
                         <article className="flex flex-col gap-9 mb-4">
                             <div className="relative">
