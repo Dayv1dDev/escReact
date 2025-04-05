@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import MainBackground from "../components/MainBackground.jsx";
 import NavBar from "../components/NavBar.jsx";
 
@@ -9,7 +10,7 @@ export default function Home() {
                 <NavBar />
                 <section className="flex flex-col items-center">
                     <h1 className="text-3xl">La plataforma para prácticar mecanografía y reducir tu tiempo de reacción</h1>
-                    <a href="/register.html" className="w-fit py-2 px-4 mt-4 font-semibold border border-black rounded-full hover:bg-black/10 hover:border-black/50 transition-all duration-150">Regístrate</a>
+                    <Link href="/register" className="w-fit py-2 px-4 mt-4 font-semibold border border-black rounded-full hover:bg-black/10 hover:border-black/50 transition-all duration-150">Regístrate</Link>
                 </section>
             </main>
             <footer className="flex items-center justify-center border-t border-[#333]">
