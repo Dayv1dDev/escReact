@@ -1,15 +1,22 @@
+import "../App.css";
+import Axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { words } from "../data/words";
 import MainBackground from "../components/MainBackground";
+import NavBar from "../components/NavBar";
 import ResultsParagraph from "../components/ResultsParagraph";
+import useUser from "../hooks/useUser.jsx";
 
 export default function Esc() {
+    const navBarRef = useRef(null);
     const gameRef = useRef(null);
     const statsRef = useRef(null);
     const wordsRef = useRef(null);
     const startRef = useRef(null);
     const inputRef = useRef(null);
+
+    const { isLogged } = useUser();
 
     const INITIAL_TIME = 30;
     const sortedWords = words.toSorted(() => Math.random() - 0.5).slice(0, 36);
@@ -21,13 +28,18 @@ export default function Esc() {
     const [speed, setSpeed] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
 
+    Axios.defaults.withCredentials = true;
+
     useEffect(() => {
-        setCurrentWords(sortedWords);
-        startEvents();
-    }, []);
+        if (isLogged === true) {
+            setCurrentWords(sortedWords);
+            startEvents();
+        }
+    }, [isLogged]);
 
     function startGame() {
         startRef.current.classList.add("hidden");
+        navBarRef.current.classList.add("hidden");
         inputRef.current.disabled = false;
         startRef.current.disabled = true;
         let currentTime = INITIAL_TIME;
@@ -55,16 +67,21 @@ export default function Esc() {
 
         inputRef.current.disabled = true;
 
+        
         const incorrectWords = document.querySelectorAll("x-word.marked").length;
         const correctWords = document.querySelectorAll("x-word.correct").length;
         const incorrectLetters = document.querySelectorAll("x-letter.incorrect").length;
         const correctLetters = document.querySelectorAll("x-letter.correct").length;
-
+        
         const totalLetters = correctLetters + incorrectLetters;
         
         const speed = correctWords / INITIAL_TIME * 60;
         let accuracy = totalLetters > 0 && correctLetters > 0 ? ((correctLetters / totalLetters) * 100).toFixed(2) : 0;
         if (!incorrectLetters && totalLetters > 0) accuracy = 100;
+        
+        Axios.post("http://localhost:5174/esc", {
+            // TO-DO: Sistema de mandar la puntuación a la base de datos
+        })
 
         return { correctWords, incorrectWords, speed, accuracy };
     }
@@ -198,43 +215,60 @@ export default function Esc() {
     }
 
     return (
-        <main className="relative h-screen flex justify-center items-center">
-            <MainBackground />
-            <section ref={gameRef} className="font-mono md:w-3xl sm:w-xl w-lg flex flex-col justify-center">
-                <time className="mb-1.5 md:text-3xl text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">{time}</time>
-                <p ref={wordsRef} className="flex flex-wrap md:text-2xl sm:text-xl text-xl gap-x-3 gap-y-1">
-                    {currentWords.map((word, index) => {
-                        const letters = word.split("");
+        <>
+        {isLogged === true && (
+            <main className="relative h-screen flex justify-center items-center">
+                <MainBackground />
+                <NavBar ref={navBarRef} className={"opacity-85"} />
+                <section ref={gameRef} className="font-mono md:w-3xl sm:w-xl w-lg flex flex-col justify-center">
+                    <time className="mb-1.5 md:text-3xl text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">{time}</time>
+                    <p ref={wordsRef} className="flex flex-wrap md:text-2xl sm:text-xl text-xl gap-x-3 gap-y-1">
+                        {currentWords.map((word, index) => {
+                            const letters = word.split("");
 
-                        return (
-                            <x-word key={index}>
-                                {letters.map((letter, index) => {
-                                    return (
-                                        <x-letter key={`${index}`} id={`${index}`}>{letter}</x-letter>
-                                    )
-                                })}
-                            </x-word>
-                        )
-                    })}
-                </p>
-                <button disabled={false} ref={startRef} onClick={startGame} className="absolute left-0 top-0 h-screen w-full bg-black/70">
-                    <span>Pulsa clic para comenzar el test</span>
-                </button>
-                <input ref={inputRef} disabled autoFocus className="absolute top-0 left-0 opacity-0 pointer-events-none" />
-            </section>
-            <section ref={statsRef} id="stats" className="hidden">
-                <h2 className="mb-2 text-4xl font-bold">Resultados</h2>
-                <div className="grid grid-cols-2 gap-6">
-                    <ResultsParagraph stat={"Palabras correctas: "} statConst={correctWords} />
-                    <ResultsParagraph stat={"Palabras incorrectas: "} statConst={incorrectWords} />
-                    <ResultsParagraph stat={"Velocidad: "} statConst={`${speed} ppm`} />
-                    <ResultsParagraph stat={"Precisión: "} statConst={`${accuracy}%`} />
-                </div>
-                <div className="mt-6 flex gap-4">
-                    <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={resetGame}>Reset</button>
-                    <Link to="/leaderboards" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
-                </div>
-            </section>
-        </main>
+                            return (
+                                <x-word key={index}>
+                                    {letters.map((letter, index) => {
+                                        return (
+                                            <x-letter key={`${index}`} id={`${index}`}>{letter}</x-letter>
+                                        )
+                                    })}
+                                </x-word>
+                            )
+                        })}
+                    </p>
+                    <button disabled={false} ref={startRef} onClick={startGame} className="absolute left-0 top-0 h-screen w-full bg-black/70">
+                        <span>Pulsa clic para comenzar el test</span>
+                    </button>
+                    <input ref={inputRef} disabled autoFocus className="absolute top-0 left-0 opacity-0 pointer-events-none" />
+                </section>
+                <section ref={statsRef} id="stats" className="hidden">
+                    <h2 className="mb-2 text-4xl font-bold">Resultados</h2>
+                    <div className="grid grid-cols-2 gap-6">
+                        <ResultsParagraph stat={"Palabras correctas: "} statConst={correctWords} />
+                        <ResultsParagraph stat={"Palabras incorrectas: "} statConst={incorrectWords} />
+                        <ResultsParagraph stat={"Velocidad: "} statConst={`${speed} ppm`} />
+                        <ResultsParagraph stat={"Precisión: "} statConst={`${accuracy}%`} />
+                    </div>
+                    <div className="mt-6 flex gap-4">
+                        <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={resetGame}>Reset</button>
+                        <Link to="/leaderboards" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
+                    </div>
+                </section>
+            </main>
+        )}
+        {isLogged === false && (
+            <main className="flex h-screen w-auto items-center justify-center">
+                <MainBackground />
+                <section className="flex flex-col items-center justify-center gap-6 p-10 max-w-[500px] rounded-sm bg-gradient-to-br from-emerald-600/50 to-blue-600/50">
+                    <h1 className="text-center text-3xl font-bold">Inicia sesión o regístrate para poder jugar</h1>
+                    <div className="flex gap-3">
+                        <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 hover:scale-105 transition-all duration-300 rounded-full">Iniciar sesión</Link>
+                        <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
+                    </div>
+                </section>
+            </main>
+        )}
+        </>
     )
 };
