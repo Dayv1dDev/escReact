@@ -30,7 +30,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        maxAge: parseInt(process.env.SESSION_MAX_AGE)
+        maxAge: 1000 * 60 * 60 * 24
     }
 }))
 
@@ -61,9 +61,22 @@ app.post("/register", (req, res) => {
     });
 });
 
+app.get("/", (req, res) => {
+    if (req.session.user) res.send({ loggedIn: true, user: req.session.user });
+    else res.send({ loggedIn: false });
+});
+
 app.get("/login", (req, res) => {
     if (req.session.user) res.send({ isLoggedIn: true, user: req.session.user });
-    else res.send({ isLoggedIn: false });
+    else res.send({ isLoggedIn: false, user: null });
+});
+
+app.get("/logout", (req, res) => {
+    res.clearCookie("userId");
+    req.session.destroy((err) => {
+        if (err) console.log(err);
+    });
+    res.send({ message: "Sesión cerrada con éxito" });
 });
 
 app.post("/login", (req, res) => {
@@ -77,10 +90,10 @@ app.post("/login", (req, res) => {
                     req.session.user = result;
                     res.send(result);
                 }
-                else res.send({message: "Nombre de usuario o contraseña incorrectos"});
+                else res.send({ message: "Nombre de usuario o contraseña incorrectos" });
             });
         } 
-        else res.send({message: "Usuario inexistente en la base de datos"});
+        else res.send({ message: "Usuario inexistente en la base de datos" });
     });
 });
 
