@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import MainBackground from "../components/MainBackground";
+import useUser from "../hooks/useUser";
 
 export default function Login() { 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const [loginStatus, setLoginStatus] = useState("");
+    const { isLogged, setIsLogged } = useUser();
 
     Axios.defaults.withCredentials = true;
 
@@ -20,18 +22,36 @@ export default function Login() {
             password: password
         }).then((res) => {
             if (res.data.message) {
+                window.sessionStorage.clear();
+                window.sessionStorage.setItem("isLogged", false);
                 setLoginStatus(res.data.message);
             } else {
-                setLoginStatus(res.data[0].username);
+                setLoginStatus("Has iniciado sesión correctamente");
+                window.sessionStorage.clear();
+                window.sessionStorage.setItem("username", res.data[0].username);
+                window.sessionStorage.setItem("isLogged", true);
+                window.location.href = "/";
             }
         })
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:5174/login").then((res) => {
-            console.log(res)
-            if (res.data.isLoggedIn === true) setLoginStatus(res.data.user[0].username);
-        });
+        // Axios.get("http://localhost:5174/login").then((res) => {
+        //     console.log(res)
+        //     if (res.data.isLoggedIn === true) {
+        //         setLoginStatus("Has iniciado sesión correctamente");
+        //         window.location.href = "/";
+        //     }
+        //     else {
+        //         window.sessionStorage.clear();
+        //         window.sessionStorage.setItem("username", res.data.user[0].username);
+        //         window.sessionStorage.setItem("isLogged", false);
+        //     }
+        // });
+        if (isLogged === true) {
+            setLoginStatus("Has iniciado sesión correctamente");
+            window.location.href = "/";
+        }
     }, []);
     
     return (
@@ -39,7 +59,7 @@ export default function Login() {
             <MainBackground />
             <main className="h-screen flex items-center justify-center">
                 <section className="flex w-[1000px] h-[400px]">
-                    <form method="POST" action="/login" className="flex flex-col justify-center w-full rounded-l-sm bg-black/50 p-10">
+                    <form method="POST" className="flex flex-col justify-center w-full rounded-l-sm bg-black/50 p-10">
                         <h1 className="text-3xl self-center font-bold mb-9">Inicia sesión en escReact</h1>
                         <div className="relative">
                             <input onChange={(e) => {setUsername(e.target.value)}} className="relative w-full py-2 pr-2 pl-2 bg-transparent text-base font-medium border-none outline-0 z-20 transition-all duration-300" type='text' id='username' name='username' maxLength={55} required />
