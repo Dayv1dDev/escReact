@@ -8,6 +8,8 @@ import useUser from "../hooks/useUser.jsx";
 export default function NavBar({className, ref}) { 
     const { isLogged, setIsLogged, globalUsername } = useUser();
     const [loginStatus, setLoginStatus] = useState("");
+    const [href, setHref] = useState(window.location.href);
+
     Axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -23,6 +25,7 @@ export default function NavBar({className, ref}) {
             setLoginStatus(res.data.message);
         });
     }
+
     return (
         <>
         {/* This is an invisible div with relative position so that it takes up the height of the menu (because menu is absolute/fixed) */}
@@ -30,11 +33,11 @@ export default function NavBar({className, ref}) {
         <header ref={ref} className={`absolute z-50 top-0 left-0 w-full h-20 flex items-center justify-between px-8 ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-[#adadad]">escReact</h1></Link>
             <nav className="flex gap-3">
-                <Link to="/esc" className="py-2 px-4 font-semibold flex items-center">Esc</Link>
-                <Link to="/react" className="py-2 px-4 font-semibold flex items-center">React</Link>
+                {href !== "http://localhost:5173/esc" && <Link to="/esc" className="py-2 px-4 font-semibold flex items-center">Esc</Link>}
+                {href !== "http://localhost:5173/react" && <Link to="/react" className="py-2 px-4 font-semibold flex items-center">React</Link>}
                 {!isLogged && (
                 <>
-                    <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full">Iniciar sesión</Link>
+                    <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
                     <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
                 </>
                 )
