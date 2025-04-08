@@ -97,6 +97,25 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.post("/esc", (req, res) => {
+    const { username, speed, accuracy } = req.body;
+
+    db.query("SELECT user_id FROM users WHERE username = ?", username, (err, result) => {
+        const userId = result[0].user_id;
+        if (err) res.send({ err: err });
+        if (result.length > 0) {
+            db.query("INSERT INTO scores(user, game, score, accuracy) VALUES (?, 'Esc', ?, ?)", [userId, speed, accuracy], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send("Error al registrar los datos de esc");
+                }
+                res.status(201).send("Datos de esc registrados con éxito");
+            });
+        } 
+        else res.send({ message: "Usuario inexistente en la base de datos" });
+    })
+});
+
 app.listen(5174, () => {
     console.log("Servidor conectado en el puerto 5174");
 });

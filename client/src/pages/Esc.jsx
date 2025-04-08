@@ -16,7 +16,7 @@ export default function Esc() {
     const startRef = useRef(null);
     const inputRef = useRef(null);
 
-    const { isLogged } = useUser();
+    const { isLogged, globalUsername } = useUser();
 
     const INITIAL_TIME = 30;
     const sortedWords = words.toSorted(() => Math.random() - 0.5).slice(0, 36);
@@ -51,10 +51,6 @@ export default function Esc() {
             if (currentTime === 0) {
                 clearInterval(interval);
                 gameOver();
-                setCorrectWords(gameOver().correctWords);
-                setIncorrectWords(gameOver().incorrectWords);
-                setSpeed(gameOver().speed);
-                setAccuracy(gameOver().accuracy);
             }
         }, 1000);
     }
@@ -66,7 +62,6 @@ export default function Esc() {
         statsRef.current.classList.add("flex", "flex-col");
 
         inputRef.current.disabled = true;
-
         
         const incorrectWords = document.querySelectorAll("x-word.marked").length;
         const correctWords = document.querySelectorAll("x-word.correct").length;
@@ -80,10 +75,19 @@ export default function Esc() {
         if (!incorrectLetters && totalLetters > 0) accuracy = 100;
         
         Axios.post("http://localhost:5174/esc", {
-            // TO-DO: Sistema de mandar la puntuación a la base de datos
-        })
+            username: globalUsername,
+            speed: speed,
+            accuracy: accuracy
+        }).then((res) => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.error("Error al enviar la puntuación: ", err);
+        });
 
-        return { correctWords, incorrectWords, speed, accuracy };
+        setCorrectWords(correctWords);
+        setIncorrectWords(incorrectWords);
+        setSpeed(speed);
+        setAccuracy(accuracy);
     }
 
     function resetGame() {
