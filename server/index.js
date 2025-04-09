@@ -86,6 +86,7 @@ app.post("/login", (req, res) => {
         if (err) res.send({ err: err });
         if (result.length > 0) {
             bcrypt.compare(password, result[0].password, (err, response) => {
+                if (err) console.log(err);
                 if (response) {
                     req.session.user = result;
                     res.send(result);
@@ -104,7 +105,7 @@ app.post("/esc", (req, res) => {
         const userId = result[0].user_id;
         if (err) res.send({ err: err });
         if (result.length > 0) {
-            db.query("INSERT INTO scores(user, game, score, accuracy) VALUES (?, 'Esc', ?, ?)", [userId, speed, accuracy], (err, result) => {
+            db.query("INSERT INTO scores(user, username, game, score, accuracy) VALUES (?, ?, 'Esc', ?, ?)", [userId, username, speed, accuracy], (err, result) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send("Error al registrar los datos de esc");
@@ -114,6 +115,26 @@ app.post("/esc", (req, res) => {
         } 
         else res.send({ message: "Usuario inexistente en la base de datos" });
     })
+});
+
+app.get("/leaderboards", (req, res) => {
+    db.query("SELECT * FROM scores ORDER BY score DESC", (err, result) => {
+        if (err) console.log(err);
+        if (result.length > 0) {
+            const scores = result.map(score => {
+                return {
+                    scoreId: score.score_id,
+                    userId: score.user,
+                    username: score.username,
+                    game: score.game,
+                    score: score.score,
+                    accuracy: score.accuracy
+                };
+            });
+            res.send(scores);
+        }
+        else res.send({ message: "No hay datos disponibles en la base de datos" });
+    });
 });
 
 app.listen(5174, () => {
