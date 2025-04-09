@@ -32,7 +32,10 @@ export default function Login() {
                 window.sessionStorage.setItem("isLogged", true);
                 window.location.href = "/";
             }
-        })
+        }).catch((err) => {
+            console.log(err);
+            setLoginStatus("Error al iniciar sesión. Por favor, inténtalo de nuevo")
+        });
     }
 
     useEffect(() => {
