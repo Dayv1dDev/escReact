@@ -33,8 +33,9 @@ export default function NavBar({className, ref}) {
         <header ref={ref} className={`absolute z-50 top-0 left-0 w-full h-20 flex items-center justify-between px-8 ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-[#adadad]">escReact</h1></Link>
             <nav className="flex gap-3">
-                {href !== "http://localhost:5173/esc" && <Link to="/esc" className="py-2 px-4 font-semibold flex items-center">Esc</Link>}
-                {href !== "http://localhost:5173/react" && <Link to="/react" className="py-2 px-4 font-semibold flex items-center">React</Link>}
+                <Link to="/leaderboards" className="py-1.5 px-3 font-semibold flex items-center">Clasificación</Link>
+                {href !== "http://localhost:5173/esc" && <Link to="/esc" className="py-1.5 px-3 font-semibold flex items-center">Esc</Link>}
+                {href !== "http://localhost:5173/react" && <Link to="/react" className="py-1.5 px-3 font-semibold flex items-center">React</Link>}
                 {!isLogged && (
                 <>
                     <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
