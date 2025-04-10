@@ -117,8 +117,8 @@ app.post("/esc", (req, res) => {
     })
 });
 
-app.get("/leaderboards", (req, res) => {
-    db.query("SELECT * FROM scores ORDER BY score DESC", (err, result) => {
+app.get("/esc/leaderboard", (req, res) => {
+    db.query("SELECT * FROM scores WHERE game = 'Esc' ORDER BY score DESC", (err, result) => {
         if (err) console.log(err);
         if (result.length > 0) {
             const scores = result.map(score => {
@@ -133,7 +133,27 @@ app.get("/leaderboards", (req, res) => {
             });
             res.send(scores);
         }
-        else res.send({ message: "No hay datos disponibles en la base de datos" });
+        else res.send({ message: "No hay datos de puntuaciones disponibles de Esc en la base de datos" });
+    });
+});
+
+app.get("/react/leaderboard", (req, res) => {
+    db.query("SELECT * FROM scores WHERE game = 'React' ORDER BY score DESC", (err, result) => {
+        if (err) console.log(err);
+        if (result.length > 0) {
+            const scores = result.map(score => {
+                return {
+                    scoreId: score.score_id,
+                    userId: score.user,
+                    username: score.username,
+                    game: score.game,
+                    score: score.score,
+                    accuracy: score.accuracy
+                };
+            });
+            res.send(scores);
+        }
+        else res.send({ message: "No hay datos de puntuaciones disponibles de React en la base de datos" });
     });
 });
 
