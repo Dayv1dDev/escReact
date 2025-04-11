@@ -265,7 +265,7 @@ export default function Esc() {
             <main className="flex h-screen w-auto items-center justify-center">
                 <MainBackground />
                 <section className="flex flex-col items-center justify-center gap-6 p-10 max-w-[500px] rounded-sm bg-gradient-to-br from-emerald-600/50 to-blue-600/50">
-                    <h1 className="text-center text-3xl font-bold">Inicia sesión o regístrate para poder jugar</h1>
+                    <h1 className="text-center text-3xl font-bold">Inicia sesión o regístrate para poder jugar a Esc</h1>
                     <div className="flex gap-3">
                         <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 hover:scale-105 transition-all duration-300 rounded-full">Iniciar sesión</Link>
                         <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
