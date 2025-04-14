@@ -24,11 +24,8 @@ export default function Home() {
                     )}
                     {isLogged === true && (
                         <>
-                        <p className="text-xl text-white/70 text-center text-balance">¡Hola, {globalUsername}! ¿Listo para jugar?</p>
-                        <div className="flex gap-x-4">
-                            <Link to={"/games"} className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Jugar</Link>
-                            <Link to={"/leaderboards"} className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Ver clasificación</Link>
-                        </div>
+                        <p className="text-xl text-white/70 text-center text-balance">¡Bienvenido/a de nuevo, {globalUsername}!</p> 
+                        <Link to={"/leaderboards"} className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Ver clasificación</Link>
                         </>
                     )}
                 </section>
