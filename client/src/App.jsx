@@ -5,6 +5,7 @@ import Esc from './pages/Esc.jsx';
 import Home from './pages/Home.jsx';
 import Leaderboards from './pages/Leaderboards.jsx';
 import Login from './pages/Login.jsx';
+import Games from './pages/Games.jsx';
 import React from './pages/React.jsx';
 import Register from './pages/Register.jsx';
 
@@ -15,8 +16,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/esc" element={<Esc />} />
-        <Route path="/react" element={<React />} />
+        <Route path="/games" element={<Games />}>
+          <Route path="/games/esc" element={<Esc />} />
+          <Route path="/games/react" element={<React />} />
+        </Route>
         <Route path="/leaderboards" element={<Leaderboards />} />
       </Routes>
     </UserContextProvider>

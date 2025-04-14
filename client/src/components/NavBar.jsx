@@ -35,8 +35,8 @@ export default function NavBar({className, ref}) {
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-white/10 bg-gradient-to-br from-emerald-400 to-blue-500">escReact</h1></Link>
             <nav className="flex gap-3">
                 <NavLink href="/leaderboards" text="Clasificación" />
-                {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
-                {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
+                {href !== "http://localhost:5173/games/esc" && <NavLink href="/games/esc" text="Esc" />}
+                {href !== "http://localhost:5173/games/react" && <NavLink href="/games/react" text="React" />}
                 {!isLogged && (
                 <>
                     <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
