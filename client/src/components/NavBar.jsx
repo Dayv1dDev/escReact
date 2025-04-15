@@ -31,9 +31,9 @@ export default function NavBar({className, ref}) {
         <>
         {/* This is an invisible div with relative position so that it takes up the height of the menu (because menu is absolute/fixed) */}
         {/* <div className="relative w-full h-20 opacity-0 pointer-events-none"></div> */}
-        <header ref={ref} className={`absolute z-50 top-0 left-0 w-full h-20 flex items-center justify-between px-8 ${className}`}>
+        <header ref={ref} className={`z-50 w-full px-4 xl:px-0 xl:w-6xl h-20 flex items-center justify-between m-auto ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-white/10 bg-gradient-to-br from-emerald-400 to-blue-500">escReact</h1></Link>
-            <nav className="flex gap-3">
+            <nav className="hidden sm:flex gap-3">
                 <NavLink href="/leaderboards" text="Clasificación" />
                 {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
@@ -54,6 +54,7 @@ export default function NavBar({className, ref}) {
                     </div>
                 )}
             </nav>
+            <button className="block sm:hidden">SVG</button>
         </header>
         </>
     )
