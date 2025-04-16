@@ -49,9 +49,10 @@ export default function Leaderboards() {
     }, []);
 
     return (
-        <main className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-            <MainBackground />
-            <NavBar />
+        <>
+        <NavBar />
+        <MainBackground />
+        <main className="w-full h-screen flex flex-col items-center justify-center">
             <section className="flex flex-col items-center justify-center gap-y-20 w-full h-auto">
                 <table className="table-auto w-1/2 text-center shadow-md rounded-lg overflow-hidden">
                     <caption className="bg-black/50 text-2xl font-bold text-white">Clasificación de Esc</caption>
@@ -169,5 +170,6 @@ export default function Leaderboards() {
                 </table>
             </section>
         </main>
+        </>
     )
 }
