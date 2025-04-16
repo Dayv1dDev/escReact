@@ -38,10 +38,12 @@ export default function NavBar({className, ref}) {
     function openMenu() {
         setMenuIconClassName("hidden");
         setCloseIconClassName("block sm:hidden");
+        setResponsiveNavClassName("flex flex-col")
     }
 
     function closeMenu() {
         setCloseIconClassName("hidden");
+        setResponsiveNavClassName("hidden")
         setMenuIconClassName("block sm:hidden");
     }
 
@@ -51,7 +53,7 @@ export default function NavBar({className, ref}) {
         {/* <div className="relative w-full h-20 opacity-0 pointer-events-none"></div> */}
         <header ref={ref} className={`z-50 w-full px-4 xl:px-0 xl:w-6xl h-20 flex items-center justify-between m-auto ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-white/10 bg-gradient-to-br from-emerald-400 to-blue-500">escReact</h1></Link>
-            <nav ref={navRef} className="hidden sm:flex gap-3">
+            <nav ref={navRef} className="hidden sm:flex gap-2">
                 <NavLink href="/leaderboards" text="Clasificación" />
                 {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
@@ -72,7 +74,16 @@ export default function NavBar({className, ref}) {
                     </div>
                 )}
             </nav>
-            <nav className={`bg-black/40 w-3xs self-end z-[60] ${responsiveNavClassName}`}>
+            <nav className={`bg-black/40 w-3xs rounded-xl absolute top-4 right-2 p-2 pt-8 z-[60] ${responsiveNavClassName}`}>
+                {isLogged && (
+                    <div className="flex items-center gap-3">
+                        <div className="py-2 px-4 flex items-center justify-center gap-x-0.5 font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full">
+                            <UserIcon className={"size-4.5"} />
+                            <span>{globalUsername}</span>
+                        </div>
+                        <button className="flex items-center justify-center rounded-full group transition-all duration-100 border border-white/90 hover:bg-red-500/20 hover:border-red-500/30 w-10 h-10" onClick={handleExit}><ExitIcon className={"group-hover:text-red-500/70"} /></button>
+                    </div>
+                )}
                 <NavLink href="/leaderboards" text="Clasificación" />
                 {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
@@ -82,19 +93,10 @@ export default function NavBar({className, ref}) {
                         <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
                     </>
                     )
-                    }
-                    {isLogged && (
-                        <div className="flex items-center gap-3">
-                            <div className="py-2 px-4 flex items-center justify-center gap-x-0.5 font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full">
-                                <UserIcon className={"size-4.5"} />
-                                <span>{globalUsername}</span>
-                            </div>
-                            <button className="flex items-center justify-center rounded-full group transition-all duration-100 border border-white/90 hover:bg-red-500/20 hover:border-red-500/30 w-10 h-10" onClick={handleExit}><ExitIcon className={"group-hover:text-red-500/70"} /></button>
-                        </div>
-                )}
+                }
             </nav>
             <button onClick={openMenu} className={`${menuIconClassName}`}><MenuIcon className={"size-8"}></MenuIcon></button>
-            <button onClick={closeMenu} className={`${closeIconClassName}`}><CloseIcon className={"size-8"}></CloseIcon></button>
+            <button onClick={closeMenu} className={`z-[70] ${closeIconClassName}`}><CloseIcon className={"size-8"}></CloseIcon></button>
         </header>
         </>
     )
