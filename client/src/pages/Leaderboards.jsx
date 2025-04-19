@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import Footer from "../components/Footer";
 import MainBackground from "../components/MainBackground";
 import NavBar from "../components/NavBar";
 import useUser from "../hooks/useUser";
@@ -50,9 +51,9 @@ export default function Leaderboards() {
 
     return (
         <>
-        <NavBar />
-        <MainBackground />
-        <main className="w-full h-screen flex flex-col items-center justify-center">
+        <main className="w-full h-[calc(100vh-73px)] flex flex-col items-center justify-center px-4">
+            <MainBackground />
+            <NavBar />
             <section className="flex flex-col items-center justify-center gap-y-20 w-full h-auto">
                 <table className="table-auto w-1/2 text-center shadow-md rounded-lg overflow-hidden">
                     <caption className="bg-black/50 text-2xl font-bold text-white">Clasificación de Esc</caption>
@@ -170,6 +171,7 @@ export default function Leaderboards() {
                 </table>
             </section>
         </main>
+        <Footer />
         </>
     )
 }
