@@ -1,3 +1,24 @@
+@media (width >= 640px){
+  .nav-link-animation::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    bottom: 7px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .nav-link-animation-parent:hover {
+    & .nav-link-animation::before{
+      transform: scaleX(1);
+    }
+  }
+}
+
 form div input:valid ~ label,
 form div input:focus ~ label {
   transform: translateY(-1.75rem);
