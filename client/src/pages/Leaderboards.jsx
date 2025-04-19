@@ -55,7 +55,7 @@ export default function Leaderboards() {
             <MainBackground />
             <NavBar />
             <section className="flex flex-col items-center justify-center gap-y-20 w-full h-auto">
-                <table className="table-auto w-1/2 text-center shadow-md rounded-lg overflow-hidden">
+                <table id="esc" className="table-auto w-1/2 text-center shadow-md rounded-lg overflow-hidden">
                     <caption className="bg-black/50 text-2xl font-bold text-white">Clasificación de Esc</caption>
                     {escErrMsg === null && (
                         <>
@@ -111,7 +111,7 @@ export default function Leaderboards() {
                         <span>{escErrMsg}</span>
                     )}
                 </table>
-                <table className="table-auto w-1/2 text-center bg-black/10 shadow-md rounded-lg overflow-hidden">
+                <table id="react" className="table-auto w-1/2 text-center bg-black/10 shadow-md rounded-lg overflow-hidden">
                     <caption className="bg-black/50 text-2xl font-bold text-white">Clasificación de React</caption>
                     {reactErrMsg === null && (
                         <>
