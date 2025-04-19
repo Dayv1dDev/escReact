@@ -221,6 +221,7 @@ export default function Esc() {
     return (
         <>
         {isLogged === true && (
+            <>
             <main className="relative h-screen flex justify-center items-center">
                 <MainBackground />
                 <NavBar ref={navBarRef} className={"opacity-85"} />
@@ -260,6 +261,7 @@ export default function Esc() {
                     </div>
                 </section>
             </main>
+            </>
         )}
         {isLogged === false && (
             <main className="flex h-screen w-auto items-center justify-center">
