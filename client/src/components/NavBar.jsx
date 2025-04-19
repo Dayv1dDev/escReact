@@ -18,8 +18,26 @@ export default function NavBar({className, ref}) {
     const [responsiveNavClassName, setResponsiveNavClassName] = useState("hidden");
     const [menuIconClassName, setMenuIconClassName] = useState("block sm:hidden");
     const [closeIconClassName, setCloseIconClassName] = useState("hidden");
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     Axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+            if (windowWidth >= 640) {
+                setMenuIconClassName("hidden");
+                setCloseIconClassName("hidden");
+                setResponsiveNavClassName("hidden");
+            } else {
+                setMenuIconClassName("block sm:hidden");
+                setCloseIconClassName("hidden");
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [windowWidth]);
 
     useEffect(() => {
         const isLogged = window.sessionStorage.getItem("isLogged") === "true" ? true : false;
@@ -49,11 +67,9 @@ export default function NavBar({className, ref}) {
 
     return (
         <>
-        {/* This is an invisible div with relative position so that it takes up the height of the menu (because menu is absolute/fixed) */}
-        {/* <div className="relative w-full h-20 opacity-0 pointer-events-none"></div> */}
         <header ref={ref} className={`absolute top-0 z-50 w-full px-4 xl:px-0 xl:w-6xl h-20 flex items-center justify-between mx-auto ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-white/10 bg-gradient-to-br from-emerald-400 to-blue-500">escReact</h1></Link>
-            <nav ref={navRef} className="hidden sm:flex gap-2">
+            <nav ref={navRef} className="hidden sm:flex gap-8">
                 <NavLink href="/leaderboards" text="Clasificación" />
                 {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
