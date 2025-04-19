@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer.jsx";
 import MainBackground from "../components/MainBackground.jsx";
 import NavBar from "../components/NavBar.jsx";
 import useUser from "../hooks/useUser.jsx";
@@ -6,11 +7,12 @@ import useUser from "../hooks/useUser.jsx";
 export default function Home() {
     const { globalUsername, isLogged } = useUser();
 
-    return (    
-        <div className="max-w-screen min-h-screen flex flex-col justify-between">
-            <MainBackground />
-            <NavBar />
+    return (
+        <>
+        <div className="relative max-w-screen min-h-screen flex flex-col justify-between">
             <main className="flex flex-col items-center justify-center px-4">
+                <MainBackground />
+                <NavBar />
                 <section className="flex flex-col items-center w-fit xl:w-6xl gap-3 mt-52">
                     <h1 className="text-3xl font-bold text-white text-center text-wrap">La plataforma ideal para prácticar mecanografía y mejorar tus reflejos</h1>
                     {isLogged === false && (
@@ -44,13 +46,9 @@ export default function Home() {
                     </article>
                 </section>
             </main>
-            <footer className="flex items-center justify-center border-t border-[#333] mt-10">
-                <div className="flex flex-col w-full p-3 xl:p-0 xl:py-3 xl:w-6xl">
-                    <p className="font-bold">escReact &copy; 2025</p>
-                    <p>Sitio web realizado por <span className="font-bold text-white/20 bg-clip-text bg-gradient-to-br from-emerald-500 to-blue-500">David Moreno Cámara</span></p>
-                </div>
-            </footer>
+            <Footer className="mt-10" />
         </div>
+        </>
     )
 }
 
