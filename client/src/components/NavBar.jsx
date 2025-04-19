@@ -51,7 +51,7 @@ export default function NavBar({className, ref}) {
         <>
         {/* This is an invisible div with relative position so that it takes up the height of the menu (because menu is absolute/fixed) */}
         {/* <div className="relative w-full h-20 opacity-0 pointer-events-none"></div> */}
-        <header ref={ref} className={`z-50 w-full px-4 xl:px-0 xl:w-6xl h-20 flex items-center justify-between m-auto ${className}`}>
+        <header ref={ref} className={`absolute top-0 z-50 w-full px-4 xl:px-0 xl:w-6xl h-20 flex items-center justify-between mx-auto ${className}`}>
             <Link to="/"><h1 className="text-4xl font-bold bg-clip-text text-white/10 bg-gradient-to-br from-emerald-400 to-blue-500">escReact</h1></Link>
             <nav ref={navRef} className="hidden sm:flex gap-2">
                 <NavLink href="/leaderboards" text="Clasificación" />
@@ -74,7 +74,7 @@ export default function NavBar({className, ref}) {
                     </div>
                 )}
             </nav>
-            <nav className={`bg-black/40 w-3xs rounded-xl absolute top-4 right-2 p-2 pt-8 z-[60] ${responsiveNavClassName}`}>
+            <nav className={`flex flex-col gap-2 bg-black/40 w-3xs rounded-xl absolute top-4 right-2 p-4 pb-4 pt-8 z-[60] ${responsiveNavClassName}`}>
                 {isLogged && (
                     <div className="flex items-center gap-3">
                         <div className="py-2 px-4 flex items-center justify-center gap-x-0.5 font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full">
@@ -89,8 +89,8 @@ export default function NavBar({className, ref}) {
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
                 {!isLogged && (
                     <>
-                        <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
-                        <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
+                        <Link to="/login" className="w-fit py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
+                        <Link to="/register" className="w-fit py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
                     </>
                     )
                 }
