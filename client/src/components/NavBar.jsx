@@ -74,10 +74,10 @@ export default function NavBar({className, ref}) {
                 {href !== "http://localhost:5173/esc" && <NavLink href="/esc" text="Esc" />}
                 {href !== "http://localhost:5173/react" && <NavLink href="/react" text="React" />}
                 {!isLogged && (
-                <>
+                <div className="flex items-center gap-3">
                     <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 rounded-full hover:scale-105 transition-all duration-200">Iniciar sesión</Link>
                     <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
-                </>
+                </div>
                 )
                 }
                 {isLogged && (
