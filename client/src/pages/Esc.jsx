@@ -215,7 +215,6 @@ export default function Esc() {
 
         if (nextLetterEl) nextLetterEl.classList.add("active");  
         else activeLetterEl.classList.add("active", "is-last");
-        // TO-DO: Revisar que la clase is-last funcione correctamente
     }
 
     return (
