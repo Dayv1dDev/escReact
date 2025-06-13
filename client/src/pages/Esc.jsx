@@ -187,7 +187,7 @@ export default function Esc() {
     }
     
 
-    function keyUp(e) {
+    function keyUp() {
         const activeWordEl = document.querySelector("x-word.active");
         const activeLetterEl = activeWordEl.querySelector("x-letter.active");
         const lettersEl = activeWordEl.querySelectorAll("x-letter");
