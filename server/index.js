@@ -117,6 +117,25 @@ app.post("/esc", (req, res) => {
     })
 });
 
+app.post("/react", (req, res) => {
+    const { username, speed } = req.body;
+
+    db.query("SELECT user_id FROM users WHERE username = ?", username, (err, result) => {
+        const userId = result[0].user_id;
+        if (err) res.send({ err: err });
+        if (result.length > 0) {
+            db.query("INSERT INTO scores(user, username, game, score) VALUES (?, ?, 'React', ?)", [userId, username, speed], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send("Error al registrar los datos de React");
+                }
+                res.status(201).send("Datos de React registrados con éxito");
+            });
+        } 
+        else res.send({ message: "Usuario inexistente en la base de datos" });
+    })
+});
+
 app.get("/esc/leaderboard", (req, res) => {
     db.query("SELECT * FROM scores WHERE game = 'Esc' ORDER BY score DESC", (err, result) => {
         if (err) console.log(err);
@@ -138,7 +157,7 @@ app.get("/esc/leaderboard", (req, res) => {
 });
 
 app.get("/react/leaderboard", (req, res) => {
-    db.query("SELECT * FROM scores WHERE game = 'React' ORDER BY score DESC", (err, result) => {
+    db.query("SELECT * FROM scores WHERE game = 'React' ORDER BY score ASC", (err, result) => {
         if (err) console.log(err);
         if (result.length > 0) {
             const scores = result.map(score => {
@@ -147,8 +166,7 @@ app.get("/react/leaderboard", (req, res) => {
                     userId: score.user,
                     username: score.username,
                     game: score.game,
-                    score: score.score,
-                    accuracy: score.accuracy
+                    score: score.score
                 };
             });
             res.send(scores);

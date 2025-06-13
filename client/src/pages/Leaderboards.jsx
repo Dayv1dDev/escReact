@@ -119,8 +119,7 @@ export default function Leaderboards() {
                             <tr className="bg-black/50">
                                 <th className="bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">#</th>
                                 <th className="bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">Usuario</th>
-                                <th className="bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">Puntuación</th>
-                                <th className="bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">Precisión</th>
+                                <th className="bg-clip-text text-transparent bg-gradient-to-br from-emerald-500 to-blue-600">Tiempo de respuesta medio</th>
                             </tr>
                         </thead>
                         <tbody className="">
@@ -137,8 +136,7 @@ export default function Leaderboards() {
                                         <tr className={`${rowCurrentUserClass} ${evenOddPosStyling}`} key={user.scoreId}>
                                             <td>{position}</td>
                                             <td>{user.username}</td>
-                                            <td>{user.score} ppm</td>
-                                            <td>{user.accuracy}%</td>
+                                            <td>{user.score} ms</td>
                                         </tr>
                                     )
                                 })}

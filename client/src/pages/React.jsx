@@ -1,15 +1,20 @@
+import Axios from "axios";
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import NavBar from "../components/NavBar";
 import MainBackground from "../components/MainBackground";
+import useUser from "../hooks/useUser.jsx";
 
 export default function React() {
+    Axios.defaults.withCredentials = true;
     let timeoutId = null;
     const msTillChange = Math.floor(Math.random() * 2000) + 3000;
 
     const startBoxRef = useRef(null);
     const gameBoxRef = useRef(null);
     const resultsBoxRef = useRef(null);
+
+    const { isLogged, globalUsername } = useUser();
 
     const [isGameStarted, setIsGameStarted] = useState(false);
     const [isPlayingRound, setIsPlayingRound] = useState(false);
@@ -19,16 +24,6 @@ export default function React() {
     const [innerSecondMessage, setInnerSecondMessage] = useState(null);
     const [resultsArray, setResultsArray] = useState([]);
     const [gameAverage, setGameAverage] = useState(0);
-
-    // useEffect(() => {
-    //     var timeoutId = setTimeout(() => {
-    //         gameBoxRef.current.classList.remove("bg-red-500/50");
-    //         gameBoxRef.current.classList.add("bg-green-500/50");
-    //         setInnerGameMessage("¡Haz clic!");
-    //         setMsSinceGreen(Date.now());
-    //         setWaitingForClick(true);
-    //     }, msTillChange);
-    // }, [isGameStarted, isPlayingRound]);
 
     function handleStartGame() {
         setResultsArray([]);
@@ -51,7 +46,6 @@ export default function React() {
     }
 
     function handleBoxClick() {
-        console.log("click");
         setInnerSecondMessage(null);
         if (resultsArray.length === 3) gameOver();
         if (waitingForClick){
@@ -77,14 +71,6 @@ export default function React() {
                 setWaitingForClick(true);
             }, msTillChange);
         }
-        // if (!waitingForClick && isGameStarted && isPlayingRound) {
-        //     setInnerGameMessage("¡Demasiado pronto! Espera a que la caja se vuelva verde.");
-        //     clearTimeout(timeoutId);
-        //     setWaitingForClick(false);
-        //     setIsPlayingRound(false);
-        //     gameBoxRef.current.classList.remove("bg-red-500/50");
-        //     gameBoxRef.current.classList.add("bg-blue-500/50");
-        // }
     }
 
     function gameOver() {
@@ -94,40 +80,56 @@ export default function React() {
         resultsBoxRef.current.classList.remove("opacity-0", "pointer-events-none");
 
         resultsArray.sort((a, b) => a - b);
-        const average = resultsArray.reduce((a, b) => a + b, 0) / resultsArray.length;
+        const average = Math.floor(resultsArray.reduce((a, b) => a + b, 0) / resultsArray.length);
 
         setGameAverage(average);
+
+        Axios.post("http://localhost:5174/react", {
+            username: globalUsername,
+            speed: average
+        }).then((res) => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.error("Error al enviar la puntuación: ", err);
+        });
     }
-    // TO-DO: No dejar que el usuario pueda jugar sin iniciar sesión
-    // TO-DO: Dentro del juego, si el usuario hace clic antes de que la caja se vuelva verde, mostrar bien el mensaje de error informativo sin que desaparezca por la pantalla verde
-    // TO-DO: Guardar los resultados en la base de datos
+
     return (
-        <main className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-            <MainBackground />
-            <NavBar />
-            <article ref={startBoxRef} onClick={handleStartGame} className="absolute top-20 h-[calc(100%-500px)] w-full flex flex-col gap-3 items-center justify-center cursor-pointer bg-gradient-to-br from-emerald-500/50 to-blue-600/50">
-                <h1 className="text-6xl font-bold text-white">React</h1>
-                <p className="text-xl text-white/90">Haz clic en esta caja para iniciar el test de reacción</p>
-                <p className="text-sm text-white/70">Cuando la caja se vuelva de color verde, clica lo antes posible</p>
-            </article>
-            <article ref={gameBoxRef} onClick={handleBoxClick} className="absolute hidden top-20 h-[calc(100%-500px)] w-full opacity-0 pointer-events-none cursor-pointer">
-                <span className="flex flex-col text-xl font-semibold">
-                    {innerGameMessage}
-                    {innerSecondMessage && <span className="text-sm text-white/70">{innerSecondMessage}</span>}
-                </span>
-            </article>
-            <article ref={resultsBoxRef} className="absolute top-20 h-[calc(100%-500px)] w-full flex flex-col gap-3 items-center justify-center bg-gradient-to-br from-emerald-500/50 to-blue-600/50 opacity-0 pointer-events-none">
-                <h1 className="text-6xl font-bold text-white">Resultados</h1>
-                <p className="text-xl font-semibold text-white/90">Tus tiempos de reacción han sido: {resultsArray.join(", ")} ms. Con una media de {gameAverage} ms</p>
-            </article>
-        </main>
+        <>
+        {isLogged === true && (
+            <main className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                <MainBackground />
+                <NavBar />
+                <article ref={startBoxRef} onClick={handleStartGame} className="absolute top-20 h-[calc(100%-500px)] w-full flex flex-col gap-3 items-center justify-center cursor-pointer bg-gradient-to-br from-emerald-500/50 to-blue-600/50">
+                    <h1 className="text-6xl font-bold text-white">React</h1>
+                    <p className="text-xl text-white/90">Haz clic en esta caja para iniciar el test de reacción</p>
+                    <p className="text-sm text-white/70">Cuando la caja se vuelva de color verde, clica lo antes posible</p>
+                </article>
+                <article ref={gameBoxRef} onClick={handleBoxClick} className="absolute hidden top-20 h-[calc(100%-500px)] w-full opacity-0 pointer-events-none cursor-pointer">
+                    <span className="flex flex-col text-xl font-semibold">
+                        {innerGameMessage}
+                        {innerSecondMessage && <span className="text-sm text-white/70">{innerSecondMessage}</span>}
+                    </span>
+                </article>
+                <article ref={resultsBoxRef} className="absolute top-20 h-[calc(100%-500px)] w-full flex flex-col gap-3 items-center justify-center bg-gradient-to-br from-emerald-500/50 to-blue-600/50 opacity-0 pointer-events-none">
+                    <h1 className="text-6xl font-bold text-white">Resultados</h1>
+                    <p className="text-xl font-semibold text-white/90">Tus tiempos de reacción han sido: {resultsArray.join(", ")} ms. Con una media de {gameAverage} ms</p>
+                </article>
+            </main>
+        )}
+        {isLogged === false && (
+            <main className="flex h-screen w-auto items-center justify-center">
+                <MainBackground />
+                <section className="flex flex-col items-center justify-center gap-6 p-10 max-w-[500px] rounded-sm bg-gradient-to-br from-emerald-600/50 to-blue-600/50">
+                    <h1 className="text-center text-3xl font-bold">Inicia sesión o regístrate para poder jugar a React</h1>
+                    <div className="flex gap-3">
+                        <Link to="/login" className="py-2 px-4 flex items-center font-semibold bg-gradient-to-br from-emerald-600 to-blue-600 hover:scale-105 transition-all duration-300 rounded-full">Iniciar sesión</Link>
+                        <Link to="/register" className="py-2 px-4 font-semibold border border-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">Regístrate</Link>
+                    </div>
+                </section>
+            </main>
+        )
+        }
+        </>
     )
 }
-
-{/* 
-<div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center gap-4">
-    <h1 className="text-6xl font-bold text-white">EscReact</h1>
-    <p className="text-xl text-white/70">¡Pronto estará disponible!</p>
-    <p className="text-sm text-white/50">Mientras tanto, puedes visitar el <Link to={"/leaderboards"}>leaderboard de esc.</Link></p>
-</div>
-*/}
