@@ -61,8 +61,3 @@ export default function Home() {
         </>
     )
 }
-
-{/* 
-<h1 className="text-6xl font-bold text-white">React</h1>
-<p className="text-xl text-white/90">Haz clic en esta caja para iniciar el test de reacción</p>
-<p className="text-sm text-white/70">Cuando la caja se vuelva de color verde, clica lo antes posible</p> */}

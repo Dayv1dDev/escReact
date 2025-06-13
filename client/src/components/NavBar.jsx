@@ -12,7 +12,6 @@ export default function NavBar({className, ref}) {
     const navRef = useRef(null);
 
     const { isLogged, setIsLogged, globalUsername } = useUser();
-    const [loginStatus, setLoginStatus] = useState("");
     const [href, setHref] = useState(window.location.href);
 
     const [responsiveNavClassName, setResponsiveNavClassName] = useState("hidden");
