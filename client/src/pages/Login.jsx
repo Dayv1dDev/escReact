@@ -10,7 +10,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
 
     const [loginStatus, setLoginStatus] = useState("");
-    const { isLogged, setIsLogged } = useUser();
+    const { isLogged } = useUser();
 
     Axios.defaults.withCredentials = true;
 
@@ -39,18 +39,6 @@ export default function Login() {
     }
 
     useEffect(() => {
-        // Axios.get("http://localhost:5174/login").then((res) => {
-        //     console.log(res)
-        //     if (res.data.isLoggedIn === true) {
-        //         setLoginStatus("Has iniciado sesión correctamente");
-        //         window.location.href = "/";
-        //     }
-        //     else {
-        //         window.sessionStorage.clear();
-        //         window.sessionStorage.setItem("username", res.data.user[0].username);
-        //         window.sessionStorage.setItem("isLogged", false);
-        //     }
-        // });
         if (isLogged === true) {
             setLoginStatus("Has iniciado sesión correctamente");
             window.location.href = "/";
