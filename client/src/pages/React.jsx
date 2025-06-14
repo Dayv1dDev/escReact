@@ -136,7 +136,7 @@ export default function React() {
                     <p className="text-xl font-semibold text-white/90">Tus tiempos de reacción han sido: {resultsArray.join(", ")} ms. Con una media de {gameAverage} ms</p>
                     <div className="flex gap-3">
                         <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={handleResetGame}>Reset</button>
-                        <Link to="/leaderboards" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
+                        <Link to="/leaderboards/#react" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
                     </div>
                 </article>
             </main>
