@@ -45,6 +45,26 @@ export default function React() {
         }, msTillChange);
     }
 
+    function handleResetGame() {
+        clearTimeout(timeoutId);
+        setIsGameStarted(false);
+        setIsPlayingRound(false);
+        setWaitingForClick(false);
+        setMsSinceGreen(0);
+        setInnerGameMessage("");
+        setInnerSecondMessage(null);
+        setResultsArray([]);
+        setGameAverage(0);
+
+        resultsBoxRef.current.classList.add("opacity-0", "pointer-events-none");
+
+        gameBoxRef.current.classList.remove("bg-green-500/50", "bg-red-500/50", "bg-blue-500/50");
+        gameBoxRef.current.classList.add("opacity-0", "pointer-events-none", "hidden");
+
+        startBoxRef.current.classList.remove("opacity-0", "pointer-events-none", "hidden");
+        startBoxRef.current.classList.add("flex", "flex-col", "items-center", "justify-center");
+    }
+
     function handleBoxClick() {
         setInnerSecondMessage(null);
         if (resultsArray.length === 3) gameOver();
@@ -114,6 +134,10 @@ export default function React() {
                 <article ref={resultsBoxRef} className="absolute top-20 h-[calc(100%-500px)] w-full flex flex-col gap-3 items-center justify-center bg-gradient-to-br from-emerald-500/50 to-blue-600/50 opacity-0 pointer-events-none">
                     <h1 className="text-6xl font-bold text-white">Resultados</h1>
                     <p className="text-xl font-semibold text-white/90">Tus tiempos de reacción han sido: {resultsArray.join(", ")} ms. Con una media de {gameAverage} ms</p>
+                    <div className="flex gap-3">
+                        <button className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md w-fit place-self-center" onClick={handleResetGame}>Reset</button>
+                        <Link to="/leaderboards" className="bg-black/25 hover:bg-gray-600/20 transition-all duration-300 p-2 rounded-md place-self-center">Clasificación</Link>
+                    </div>
                 </article>
             </main>
         )}
@@ -128,8 +152,7 @@ export default function React() {
                     </div>
                 </section>
             </main>
-        )
-        }
+        )}
         </>
     )
 }
